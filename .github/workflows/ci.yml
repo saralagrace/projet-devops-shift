@@ -25,3 +25,5 @@ jobs:
         run: |
           /tmp/ansible-ci/bin/ansible-playbook preparation.yaml --syntax-check
           /tmp/ansible-ci/bin/ansible-playbook deploiement.yaml --syntax-check
+      - name: Verifier Docker Compose
+        run: docker compose config -q
