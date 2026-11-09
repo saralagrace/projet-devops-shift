@@ -1,0 +1,47 @@
+name: CI - Projet DevOps SHIFT
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code GitHub
+        uses: actions/checkout@v4
+
+      - name: Installer Ansible
+        run: |
+          python3 -m pip install ansible-core
+
+      - name: Vérifier la syntaxe du playbook
+        run: |
+          ansible-playbook deploiement.yaml --syntax-check
+          ansible-playbook preparation.yaml --syntax-checkname: CI - Projet DevOps SHIFT
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code GitHub
+        uses: actions/checkout@v4
+
+      - name: Installer Ansible
+        run: |
+          python3 -m pip install ansible-core
+
+      - name: Vérifier la syntaxe du playbook
+        run: |
+          ansible-playbook deploiement.yaml --syntax-check
+          ansible-playbook preparation.yaml --syntax-check
