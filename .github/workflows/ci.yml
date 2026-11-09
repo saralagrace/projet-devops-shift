@@ -8,40 +8,20 @@ on:
 
 jobs:
   verification:
+    name: Verification Ansible
     runs-on: ubuntu-latest
 
     steps:
-      - name: Récupérer le code GitHub
+      - name: Recuperer le code
         uses: actions/checkout@v4
 
       - name: Installer Ansible
         run: |
-          python3 -m pip install ansible-core
+          python3 -m venv /tmp/ansible-ci
+          /tmp/ansible-ci/bin/pip install ansible-core
+          /tmp/ansible-ci/bin/ansible-galaxy collection install community.docker
 
-      - name: Vérifier la syntaxe du playbook
+      - name: Verifier les playbooks Ansible
         run: |
-          ansible-playbook deploiement.yaml --syntax-check
-          ansible-playbook preparation.yaml --syntax-checkname: CI - Projet DevOps SHIFT
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  verification:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Récupérer le code GitHub
-        uses: actions/checkout@v4
-
-      - name: Installer Ansible
-        run: |
-          python3 -m pip install ansible-core
-
-      - name: Vérifier la syntaxe du playbook
-        run: |
-          ansible-playbook deploiement.yaml --syntax-check
-          ansible-playbook preparation.yaml --syntax-check
+          /tmp/ansible-ci/bin/ansible-playbook preparation.yaml --syntax-check
+          /tmp/ansible-ci/bin/ansible-playbook deploiement.yaml --syntax-check
