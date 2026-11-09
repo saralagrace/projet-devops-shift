@@ -8,7 +8,7 @@ on:
 
 jobs:
   verification:
-    name: Verification Ansible
+    name: Verification Ansible et Docker
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,29 @@ jobs:
         run: |
           /tmp/ansible-ci/bin/ansible-playbook preparation.yaml --syntax-check
           /tmp/ansible-ci/bin/ansible-playbook deploiement.yaml --syntax-check
+
       - name: Verifier Docker Compose
         run: docker compose config -q
+
       - name: Construire l'image Docker
-        run: docker build -t shift-web:test .
+        run: docker build -t sara-web:v1 .
+
+      - name: Demarrer le conteneur Docker
+        run: docker compose up -d --no-build
+
+      - name: Tester le site web
+        run: |
+          for i in {1..10}; do
+            if curl -fsS http://localhost:8081 > /dev/null; then
+              echo "TEST WEB REUSSI"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "ECHEC DU TEST WEB"
+          docker compose logs web
+          exit 1
+
+      - name: Arreter les conteneurs
+        if: always()
+        run: docker compose down
