@@ -1,0 +1,2 @@
+Serveur préparé avec Ansible.
+Application hébergée avec Docker Compose.

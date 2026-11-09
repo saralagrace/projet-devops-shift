@@ -1,0 +1,32 @@
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform.tfstate.lock.info
+**/crash.log
+**/crash.*.log
+**/*.tfvars
+**/*.tfvars.json
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# Secrets et identifiants
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*secret*
+*token*
+
+# Sauvegardes
+*.bak
+
+# Python
+__pycache__/
+.venv/
+*.tf.save

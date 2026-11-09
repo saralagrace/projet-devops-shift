@@ -1,0 +1,44 @@
+---
+- name: Déployer notre application web
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Créer la page de notre application
+      ansible.builtin.copy:
+        dest: /home/sara/projet-devops/site/index.html
+        owner: sara
+        group: sara
+        mode: '0644'
+        content: |
+          <!DOCTYPE html>
+          <html lang="fr">
+          <head>
+            <meta charset="UTF-8">
+            <title>Laboratoire DevOps SHIFT</title>
+          </head>
+          <body>
+            <h1>Bienvenue dans mon laboratoire DevOps SHIFT !</h1>
+            <p>Proxmox héberge Ubuntu.</p>
+            <p>Terraform automatise l'infrastructure.</p>
+            <p>Docker exécute Nginx.</p>
+            <p>Ansible automatise le déploiement.</p>
+          </body>
+          </html>
+      notify: Reconstruire et déployer le site
+
+    - name: Vérifier que le service web est démarré
+      community.docker.docker_compose_v2:
+        project_src: /home/sara/projet-devops
+        state: present
+        build: policy
+        recreate: auto
+
+  handlers:
+    - name: Reconstruire et déployer le site
+      community.docker.docker_compose_v2:
+        project_src: /home/sara/projet-devops
+        state: present
+        build: always
+        recreate: auto

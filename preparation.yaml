@@ -1,0 +1,29 @@
+---
+- name: Préparer notre serveur Docker
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Installer Docker et Compose
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - docker-compose-v2
+        state: present
+
+    - name: Démarrer Docker et activer son démarrage automatique
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Créer un fichier de suivi dans notre site
+      ansible.builtin.copy:
+        dest: /home/sara/projet-devops/site/suivi.txt
+        content: |
+          Serveur préparé avec Ansible.
+          Application hébergée avec Docker Compose.
+        owner: sara
+        group: sara
+        mode: '0644'
